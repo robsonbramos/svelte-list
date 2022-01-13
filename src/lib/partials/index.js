@@ -6,3 +6,4 @@ export { default as Summary } from './Summary.svelte';
 export { default as HeaderCell } from './HeaderCell.svelte';
 export { default as NoData } from './NoData.svelte';
 export { default as TableActions } from './TableActions.svelte';
+export { default as Icon } from './Icon.svelte';
