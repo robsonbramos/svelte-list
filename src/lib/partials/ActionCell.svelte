@@ -1,8 +1,8 @@
-<script>
-	import { lastAction } from '../stores';
+<script lang="ts">
+	import type { Row, RowAction } from '../types';
 
-	export let row;
-	export let actions;
+	export let row: Row;
+	export let actions: Array<RowAction>;
 </script>
 
 <td>
@@ -10,9 +10,8 @@
 		{#each actions as action}
 			<span
 				class={`mx-1 cursor-pointer text-${action.color ?? 'light'}`}
-				on:click={async () => {
-					await action.callback(row);
-					lastAction.set(action);
+				on:click={() => {
+					action.callback(row);
 				}}
 			>
 				<div class="d-flex justify-content-between">

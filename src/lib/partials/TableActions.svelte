@@ -1,15 +1,15 @@
-<script>
+<script lang="ts">
 	import { scale } from 'svelte/transition';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { searchTerm, rowsPerPage } from '../stores';
 	import Icon from './Icon.svelte';
 
-	let searchEnabled = false;
-	let exportEnabled = false;
-	let recordsEnabled = false;
-	let search = '';
-	let recordsPerPage = $rowsPerPage;
+	let searchEnabled: boolean = false;
+	let exportEnabled: boolean = false;
+	let recordsEnabled: boolean = false;
+	let search: string = '';
+	let recordsPerPage: number = $rowsPerPage;
 
 	const widthSearch = tweened(0, { duration: 1000, easing: cubicOut });
 	const widthExport = tweened(0, { duration: 1000, easing: cubicOut });
@@ -38,7 +38,7 @@
 	<div class="actions gap-1">
 		<!-- SEARCH -->
 		<span class="action-item cursor-pointer" on:click={() => (searchEnabled = enableAction())}>
-			<Icon name="search" size="12" class={searchEnabled && 'text-primary'} />
+			<Icon name="search" size={12} class={searchEnabled && 'text-primary'} />
 		</span>
 		<div class="action-item" style={`width:${$widthSearch}px`}>
 			{#if searchEnabled}
@@ -66,7 +66,7 @@
 
 		<!-- RECORDS PER PAGE -->
 		<span class="action-item cursor-pointer" on:click={() => (recordsEnabled = enableAction())}>
-			<Icon name="listOl" size="12" />
+			<Icon name="listOl" size={12} />
 		</span>
 		<div class="action-item" style={`width:${$widthRecords}px`}>
 			{#if recordsEnabled}

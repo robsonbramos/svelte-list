@@ -1,9 +1,11 @@
-<script>
+<script lang="ts">
+	import type { Column, Row } from '../types';
+
 	import { createEventDispatcher } from 'svelte';
 	import Icon from './Icon.svelte';
 
-	export let row;
-	export let column;
+	export let row: Row;
+	export let column: Column;
 
 	const dispatch = createEventDispatcher();
 
@@ -17,7 +19,7 @@
 			<!-- E-MAIL -->
 			{#if column.type === 'email'}
 				<div style="pointer-events:none!important">
-					<Icon name="envelope" size="10" class="me-2" />
+					<Icon name="envelope" size={10} class="me-2" />
 					<a href="mailto:{row[column.key]}">
 						{row[column.key]}
 					</a>
@@ -25,13 +27,13 @@
 
 				<!-- ADDRESS -->
 			{:else if column.type === 'address'}
-				<Icon name="geoAlt" size="10" class="me-2" />
+				<Icon name="geoAlt" size={10} class="me-2" />
 				<em>
 					{row[column.key]}
 				</em>
 			{:else if column.type === 'phone'}
 				<!-- PHONE -->
-				<Icon name="telephone" size="10" class="me-2" />
+				<Icon name="telephone" size={10} class="me-2" />
 				{row[column.key]}
 			{:else if column.type === 'currency'}
 				<!-- CURRENCY -->
@@ -62,9 +64,9 @@
 				<!-- BOOL -->
 				<div class="m-auto">
 					{#if row[column.key]}
-						<span class="text-success"><Icon name="checkCircle" size="12" /></span>
+						<span class="text-success"><Icon name="checkCircle" size={12} /></span>
 					{:else}
-						<span class="text-danger"><Icon name="xCircle" size="12" /></span>
+						<span class="text-danger"><Icon name="xCircle" size={12} /></span>
 					{/if}
 				</div>
 			{:else}
@@ -75,7 +77,7 @@
 			<!-- NO DATA -->
 		{:else}
 			<div class="m-auto">
-				<Icon name="dashLg" size="14" />
+				<Icon name="dashLg" size={14} />
 			</div>
 		{/if}
 	</div>

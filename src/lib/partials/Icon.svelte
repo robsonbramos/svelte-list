@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import * as icons from '../icons';
 
-	export let name;
-	export let size;
+	export let name: string;
+	export let size: number;
 </script>
 
 <svg
