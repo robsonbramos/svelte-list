@@ -117,3 +117,9 @@
 		<small class={css.copyrightText}>&copy Svelte List</small>
 	</div>
 </div>
+
+<style global>
+	.cursor-pointer {
+		cursor: pointer;
+	}
+</style>
