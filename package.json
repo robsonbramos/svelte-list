@@ -1,5 +1,5 @@
 {
-	"name": "listar",
+	"name": "svelte-list",
 	"version": "0.0.3",
 	"scripts": {
 		"dev": "svelte-kit dev",
