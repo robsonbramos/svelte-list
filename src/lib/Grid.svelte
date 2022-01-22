@@ -1,3 +1,7 @@
+<script context="module" lang="ts">
+	export type Theme = 'bootstrap' | 'material';
+</script>
+
 <script lang="ts">
 	import {
 		pageRows,
@@ -10,8 +14,7 @@
 	} from './stores';
 	import * as utils from './utils';
 	import { NoData, Pagination, Row, TableActions, Summary, HeaderCell } from './partials';
-
-	import './themes/bootstrap.css';
+	import css from './themes/bootstrap.json';
 
 	export let columns = [];
 	export let rows = [];
@@ -51,7 +54,6 @@
 			pageRows.set(
 				await utils.loadPageRows(utils.splitRowsIntoPages(filtered, $rowsPerPage), $currentPage)
 			);
-			// rowsPerPage.set(itemsPerPage)
 		}
 
 		noData = $pageRows.length <= 0;
@@ -68,16 +70,14 @@
 		loadData();
 </script>
 
-<div class="sv_table-container">
+<div class={css.container}>
 	{#if isLoading}
-		<div
-			class="bg-white opacity-75 w-100 h-100 position-absolute d-flex justify-content-center align-items-center"
-		>
+		<div class={css.loadingOverlay}>
 			<span>LOADING...</span>
 		</div>
 	{/if}
 	<TableActions />
-	<table id={$tableId} class={noData ? `table bg-white mb-0` : `table table-hover bg-white mb-0`}>
+	<table id={$tableId} class={noData ? css.tableNoData : css.tableWithData}>
 		<thead>
 			<tr>
 				{#each columns as col}
@@ -106,7 +106,7 @@
 	</table>
 </div>
 
-<div class="gap-2 d-flex flex-column flex-md-row justify-content-between align-items-center">
+<div class={css.underTableContainer}>
 	<div>
 		<Summary {totalPages} {totalRows} {noData} {isLoading} />
 	</div>
@@ -114,6 +114,6 @@
 		<Pagination {totalPages} {noData} on:pageChange />
 	</div>
 	<div>
-		<small class="text-gray-500">&copy Svelte List</small>
+		<small class={css.copyrightText}>&copy Svelte List</small>
 	</div>
 </div>

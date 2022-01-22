@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { scrollTo } from '../actions';
 	import { tableId, currentPage } from '../stores';
+	import css from '../themes/bootstrap.json';
 
 	export let totalPages: number;
 	export let noData: boolean;
@@ -19,21 +20,33 @@
 
 {#if !noData}
 	<nav aria-label="Page navigation">
-		<ul class="pagination cursor-pointer mb-0">
-			<li class={$currentPage === 1 ? 'page-item disabled' : 'page-item'}>
-				<span class="page-link" on:click={() => setPage($currentPage - 1)}>Previous</span>
+		<ul class={css.paginationListGroup}>
+			<li class={$currentPage === 1 ? css.paginationListItemDisabled : css.paginationListItem}>
+				<span class={css.paginationPageLink} on:click={() => setPage($currentPage - 1)}
+					>Previous</span
+				>
 			</li>
 
 			{#each pages as page, i}
-				<li class={$currentPage === page + 1 ? 'page-item active' : 'page-item'}>
-					<span class="page-link" on:click={() => setPage(page + 1)} use:scrollTo={`#${$tableId}`}>
+				<li
+					class={$currentPage === page + 1 ? css.paginationListItemActive : css.paginationListItem}
+				>
+					<span
+						class={css.paginationPageLink}
+						on:click={() => setPage(page + 1)}
+						use:scrollTo={`#${$tableId}`}
+					>
 						{page + 1}
 					</span>
 				</li>
 			{/each}
 
-			<li class={$currentPage === totalPages ? 'page-item disabled' : 'page-item'}>
-				<span class="page-link" on:click={() => setPage($currentPage + 1)}>Next</span>
+			<li
+				class={$currentPage === totalPages
+					? css.paginationListItemDisabled
+					: css.paginationListItem}
+			>
+				<span class={css.paginationPageLink} on:click={() => setPage($currentPage + 1)}>Next</span>
 			</li>
 		</ul>
 	</nav>

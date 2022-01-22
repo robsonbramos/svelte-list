@@ -4,6 +4,7 @@
 	import { cubicOut } from 'svelte/easing';
 	import { searchTerm, rowsPerPage } from '../stores';
 	import Icon from './Icon.svelte';
+	import css from '../themes/bootstrap.json';
 
 	let searchEnabled: boolean = false;
 	let exportEnabled: boolean = false;
@@ -34,11 +35,11 @@
 	$: recordsPerPage, rowsPerPage.set(recordsPerPage);
 </script>
 
-<div class="d-flex flex-row justify-content-between align-items-center mb-2">
+<div class={css.tableActionsContainer}>
 	<div class="actions gap-1">
 		<!-- SEARCH -->
 		<span class="action-item cursor-pointer" on:click={() => (searchEnabled = enableAction())}>
-			<Icon name="search" size={12} class={searchEnabled && 'text-primary'} />
+			<Icon name="search" size={12} class={searchEnabled && css.tableActionsSearchIconEnabled} />
 		</span>
 		<div class="action-item" style={`width:${$widthSearch}px`}>
 			{#if searchEnabled}
@@ -46,7 +47,7 @@
 					out:scale={{ delay: 500 }}
 					type="text"
 					bind:value={search}
-					class="form-control form-control-sm"
+					class={css.tableActionsSearchInput}
 				/>
 			{/if}
 		</div>
@@ -74,7 +75,7 @@
 					out:scale={{ delay: 500 }}
 					bind:value={recordsPerPage}
 					type="text"
-					class="form-select form-select-sm"
+					class={css.tableActionsPerPageSelect}
 				>
 					<option selected={false} disabled={true}>Items per page</option>
 					<option>5</option>
