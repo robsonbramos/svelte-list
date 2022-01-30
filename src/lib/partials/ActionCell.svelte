@@ -7,7 +7,7 @@
 </script>
 
 <td>
-	<div class={css.actionCellContainer}>
+	<div class="d-flex flex-row justify-content-end align-items-center">
 		{#each actions as action}
 			<span
 				class={`mx-1 cursor-pointer text-${action.color ?? 'light'}`}

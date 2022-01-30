@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { currentPage } from '../stores';
-	import css from '../themes/bootstrap.json';
 
 	export let totalPages: number;
 	export let totalRows: number;
@@ -8,7 +7,7 @@
 	export let isLoading: boolean;
 </script>
 
-<small class={css.summaryContainer}>
+<small class="text-gray-700">
 	{#if isLoading}
 		<span class="text-gray-700">Loading summary...</span>
 	{:else if noData}

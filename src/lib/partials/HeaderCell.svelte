@@ -2,13 +2,12 @@
 	import type { Column } from '../types';
 	import { currentSortColumn, sortOrderAsc } from '../stores';
 	import Icon from './Icon.svelte';
-	import css from '../themes/bootstrap.json';
 
 	export let col: Column;
 </script>
 
 <th>
-	<div class={css.headerCellContainer}>
+	<div class="d-flex flex-row justify-content-around align-items-center">
 		<span>
 			{col.label}
 		</span>

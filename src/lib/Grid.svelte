@@ -1,7 +1,3 @@
-<script context="module" lang="ts">
-	export type Theme = 'bootstrap' | 'material';
-</script>
-
 <script lang="ts">
 	import {
 		pageRows,
@@ -14,7 +10,6 @@
 	} from './stores';
 	import * as utils from './utils';
 	import { NoData, Pagination, Row, TableActions, Summary, HeaderCell } from './partials';
-	import css from './themes/bootstrap.json';
 
 	export let columns = [];
 	export let rows = [];
@@ -70,14 +65,16 @@
 		loadData();
 </script>
 
-<div class={css.container}>
+<div class="table-responsive position-relative mb-3">
 	{#if isLoading}
-		<div class={css.loadingOverlay}>
+		<div
+			class="bg-white opacity-75 w-100 h-100 position-absolute d-flex justify-content-center align-items-center"
+		>
 			<span>LOADING...</span>
 		</div>
 	{/if}
 	<TableActions />
-	<table id={$tableId} class={noData ? css.tableNoData : css.tableWithData}>
+	<table id={$tableId} class={noData ? 'table bg-white mb-0' : 'table table-hover bg-white mb-0'}>
 		<thead>
 			<tr>
 				{#each columns as col}
@@ -106,7 +103,7 @@
 	</table>
 </div>
 
-<div class={css.underTableContainer}>
+<div class="gap-2 d-flex flex-column flex-md-row justify-content-between align-items-center">
 	<div>
 		<Summary {totalPages} {totalRows} {noData} {isLoading} />
 	</div>
@@ -114,7 +111,7 @@
 		<Pagination {totalPages} {noData} on:pageChange />
 	</div>
 	<div>
-		<small class={css.copyrightText}>&copy Svelte List</small>
+		<small class="text-gray-500">&copy Svelte List</small>
 	</div>
 </div>
 

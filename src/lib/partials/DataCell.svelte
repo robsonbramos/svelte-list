@@ -2,7 +2,6 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { Column, Row } from '../types';
 	import Icon from './Icon.svelte';
-	import css from '../themes/bootstrap.json';
 
 	export let row: Row;
 	export let column: Column;
@@ -14,12 +13,12 @@
 
 <!-- FIXME: on click should be on div not td... but that should be solving by replacing table with div list -->
 <td on:click={onClickRow} class="cursor-pointer">
-	<div class={css.dataCellContainer}>
+	<div class="d-flex flex-row align-items-center">
 		{#if ![undefined, null].includes(row[column.key])}
 			<!-- E-MAIL -->
 			{#if column.type === 'email'}
 				<div style="pointer-events:none!important">
-					<Icon name="envelope" size={10} class={css.me2} />
+					<Icon name="envelope" size={10} class="me-2" />
 					<a href="mailto:{row[column.key]}">
 						{row[column.key]}
 					</a>
@@ -27,17 +26,17 @@
 
 				<!-- ADDRESS -->
 			{:else if column.type === 'address'}
-				<Icon name="geoAlt" size={10} class={css.me2} />
+				<Icon name="geoAlt" size={10} class="me-2" />
 				<em>
 					{row[column.key]}
 				</em>
 			{:else if column.type === 'phone'}
 				<!-- PHONE -->
-				<Icon name="telephone" size={10} class={css.me2} />
+				<Icon name="telephone" size={10} class="me-2" />
 				{row[column.key]}
 			{:else if column.type === 'currency'}
 				<!-- CURRENCY -->
-				<div class={css.msAuto}>
+				<div class="ms-auto">
 					{row[column.key].toLocaleString('pt-BR', {
 						style: 'currency',
 						currency: row.options.currency ?? 'USD'
@@ -46,7 +45,7 @@
 			{:else if column.type === 'label'}
 				<!-- LABEL -->
 				<div>
-					<span class={css.dataCellTypeLabel}>
+					<span class="badge border border-secondary text-dark">
 						{row[column.key]}
 					</span>
 				</div>
@@ -54,7 +53,7 @@
 				<!-- INFO -->
 				<div>
 					<span
-						class={css.textInfo}
+						class="text-info"
 						style="text-decoration-line: underline; text-decoration-style: dotted; text-decoration-thickness: 1px;"
 					>
 						{row[column.key]}
@@ -62,11 +61,11 @@
 				</div>
 			{:else if column.type === 'bool'}
 				<!-- BOOL -->
-				<div class={css.mAuto}>
+				<div class="m-auto">
 					{#if row[column.key]}
-						<span class={css.textSuccess}><Icon name="checkCircle" size={12} /></span>
+						<span class="text-success"><Icon name="checkCircle" size={12} /></span>
 					{:else}
-						<span class={css.textDanger}><Icon name="xCircle" size={12} /></span>
+						<span class="text-danger"><Icon name="xCircle" size={12} /></span>
 					{/if}
 				</div>
 			{:else}
@@ -76,7 +75,7 @@
 
 			<!-- NO DATA -->
 		{:else}
-			<div class={css.mAuto}>
+			<div class="m-auto">
 				<Icon name="dashLg" size={14} />
 			</div>
 		{/if}
