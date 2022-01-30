@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Row, RowAction } from '../types';
-	import css from '../themes/bootstrap.json';
 
 	export let row: Row;
 	export let actions: Array<RowAction>;

@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import Grid from '$lib/Grid.svelte';
 
 	let columns = [
@@ -47,4 +47,4 @@
 	];
 </script>
 
-<Grid {columns} bind:rows {actions} itemsPerPage={6} />
+<Grid {columns} bind:rows {actions} itemsPerPage={6} /> -->

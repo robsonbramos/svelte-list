@@ -12,7 +12,7 @@
 </script>
 
 <!-- FIXME: on click should be on div not td... but that should be solving by replacing table with div list -->
-<td on:click={onClickRow} class="cursor-pointer">
+<td on:click={onClickRow} class="text-red-500 cursor-pointer">
 	<div class="d-flex flex-row align-items-center">
 		{#if ![undefined, null].includes(row[column.key])}
 			<!-- E-MAIL -->

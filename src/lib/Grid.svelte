@@ -10,6 +10,7 @@
 	} from './stores';
 	import * as utils from './utils';
 	import { NoData, Pagination, Row, TableActions, Summary, HeaderCell } from './partials';
+	import './output.css';
 
 	export let columns = [];
 	export let rows = [];
@@ -65,7 +66,7 @@
 		loadData();
 </script>
 
-<div class="table-responsive position-relative mb-3">
+<div class="text-lg table-responsive position-relative mb-3">
 	{#if isLoading}
 		<div
 			class="bg-white opacity-75 w-100 h-100 position-absolute d-flex justify-content-center align-items-center"
