@@ -11,25 +11,60 @@
 	const onClickRow = () => dispatch('clickRow', row);
 </script>
 
+<!-- <td class="px-6 py-4 whitespace-nowrap">
+	<div class="flex items-center">
+		<div class="flex-shrink-0 h-10 w-10">
+			<img
+				class="h-10 w-10 rounded-full"
+				src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
+				alt=""
+			/>
+		</div>
+		<div class="ml-4">
+			<div class="text-sm font-medium text-gray-900">Jane Cooper</div>
+			<div class="text-sm text-gray-500">jane.cooper@example.com</div>
+		</div>
+	</div>
+</td>
+<td class="">
+	<div class="text-sm text-gray-900">Regional Paradigm Technician</div>
+	<div class="text-sm text-gray-500">Optimization</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+	<span
+		class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+	>
+		Active
+	</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"> Admin </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+	<a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+</td> -->
+
 <!-- FIXME: on click should be on div not td... but that should be solving by replacing table with div list -->
-<td on:click={onClickRow} class="text-red-500 cursor-pointer">
-	<div class="d-flex flex-row align-items-center">
-		{#if ![undefined, null].includes(row[column.key])}
+<td on:click={onClickRow} class="text-sm px-4 py-3 whitespace-nowrap">
+	{#if ![undefined, null].includes(row[column.key])}
+		{#if column.template}
+			{@html column.template(row)}
+		{:else}
 			<!-- E-MAIL -->
 			{#if column.type === 'email'}
-				<div style="pointer-events:none!important">
-					<Icon name="envelope" size={10} class="me-2" />
-					<a href="mailto:{row[column.key]}">
+				<a href="mailto:{row[column.key]}" class="gap-1 flex justify-start align-middle">
+					<Icon name="mail" />
+					<span>
 						{row[column.key]}
-					</a>
-				</div>
+					</span>
+				</a>
 
 				<!-- ADDRESS -->
 			{:else if column.type === 'address'}
-				<Icon name="geoAlt" size={10} class="me-2" />
-				<em>
-					{row[column.key]}
-				</em>
+				<div class="gap-1 flex justify-start align-middle">
+					<Icon name="locationMarker" />
+					<em>
+						{@html row[column.key]}
+					</em>
+				</div>
 			{:else if column.type === 'phone'}
 				<!-- PHONE -->
 				<Icon name="telephone" size={10} class="me-2" />
@@ -45,8 +80,10 @@
 			{:else if column.type === 'label'}
 				<!-- LABEL -->
 				<div>
-					<span class="badge border border-secondary text-dark">
-						{row[column.key]}
+					<span
+						class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md border-1 border-gray-300 text-gray-500"
+					>
+						{@html row[column.key]}
 					</span>
 				</div>
 			{:else if column.type === 'info'}
@@ -63,21 +100,33 @@
 				<!-- BOOL -->
 				<div class="m-auto">
 					{#if row[column.key]}
-						<span class="text-success"><Icon name="checkCircle" size={12} /></span>
+						<span
+							class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+						>
+							Active
+						</span>
 					{:else}
-						<span class="text-danger"><Icon name="xCircle" size={12} /></span>
+						<span
+							class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+						>
+							Inactive
+						</span>
 					{/if}
 				</div>
 			{:else}
 				<!-- GENERAL -->
-				{@html row[column.key]}
+				<div class="text-gray-900">{@html row[column.key]}</div>
 			{/if}
 
-			<!-- NO DATA -->
-		{:else}
-			<div class="m-auto">
-				<Icon name="dashLg" size={14} />
-			</div>
+			{#if column.hint}
+				<div class="text-gray-500">{@html row[column.hint]}</div>
+			{/if}
 		{/if}
-	</div>
+
+		<!-- NO DATA -->
+	{:else}
+		<div class="m-auto text-gray-400">
+			<Icon name="minus" />
+		</div>
+	{/if}
 </td>

@@ -1,8 +1,21 @@
-<!-- <script lang="ts">
+<script lang="ts">
 	import Grid from '$lib/Grid.svelte';
 
 	let columns = [
-		{ key: 'name', label: 'Name', sortable: true },
+		// {
+		// 	key: 'name',
+		// 	label: 'Name',
+		// 	sortable: true,
+		// 	template: (row) => {
+		// 		return `${row.name} <br> ${row.email}`;
+		// 	}
+		// },
+		{
+			key: 'name',
+			label: 'Name',
+			sortable: true,
+			hint: 'email'
+		},
 		{ key: 'email', label: 'E-mail', type: 'email', sortable: true },
 		{ key: 'address', label: 'Address', type: 'address' },
 		{ key: 'phone', label: 'Phone', type: 'phone' },
@@ -31,20 +44,10 @@
 		{ id: 8, name: 'Silvo Santos', email: 'silvio@sbt.com.br' }
 	];
 
-	const remove = (id) => {
-		rows = rows.filter((r) => r.id != id);
-	};
-
 	let actions = [
-		{ label: 'Delete', color: 'danger', callback: (row) => remove(row.id) },
-		{
-			label: 'View',
-			color: 'info',
-			callback: (row) => {
-				alert(row.name);
-			}
-		}
+		{ type: 'delete', label: 'Delete', fn: (row) => alert(`Deleting ${row.name}`) },
+		{ type: 'view', label: 'View', fn: (row) => alert(`View ${row.name}`) }
 	];
 </script>
 
-<Grid {columns} bind:rows {actions} itemsPerPage={6} /> -->
+<Grid {columns} bind:rows {actions} itemsPerPage={6} />

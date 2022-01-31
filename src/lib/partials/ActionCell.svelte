@@ -6,18 +6,42 @@
 </script>
 
 <td>
-	<div class="d-flex flex-row justify-content-end align-items-center">
+	<div class="text-sm flex align-middle justify-center">
 		{#each actions as action}
-			<span
-				class={`mx-1 cursor-pointer text-${action.color ?? 'light'}`}
-				on:click={() => {
-					action.callback(row);
-				}}
-			>
-				<div class="d-flex justify-content-between">
-					{@html action.label}
-				</div>
-			</span>
+			{#if action.type === 'delete'}
+				<span
+					class="mx-1 text-red-500"
+					on:click={() => {
+						action.fn(row);
+					}}
+				>
+					<div class="flex justify-between">
+						{@html action.label}
+					</div>
+				</span>
+			{:else if action.type === 'view'}
+				<span
+					class="mx-1 text-blue-500"
+					on:click={() => {
+						action.fn(row);
+					}}
+				>
+					<div class="flex justify-between">
+						{@html action.label}
+					</div>
+				</span>
+			{:else}
+				<span
+					class="mx-1 text-blue-500"
+					on:click={() => {
+						action.fn(row);
+					}}
+				>
+					<div class="flex justify-between">
+						{@html action.label}
+					</div>
+				</span>
+			{/if}
 		{/each}
 	</div>
 </td>
