@@ -1,10 +1,19 @@
-import type { TRow, TServerResponse } from './types';
+import type { TRow } from './types';
 
 export const splitRowsIntoPages = (rows: TRow[], itemsPerPage: number): TRow[][] => {
 	return Array(Math.ceil(rows.length / itemsPerPage))
 		.fill(undefined)
 		.map((_, index) => index * itemsPerPage)
 		.map((begin) => rows.slice(begin, begin + itemsPerPage));
+};
+
+export const sliceIntoPages = (rows: TRow[], itemsPerPage: number): TRow[][] => {
+	const res = [];
+	for (let i = 0; i < rows.length; i += itemsPerPage) {
+		const chunk = rows.slice(i, i + itemsPerPage);
+		res.push(chunk);
+	}
+	return res;
 };
 
 export const countRows = (rows: TRow[]): number => {
@@ -31,7 +40,7 @@ export const sort = (rows: TRow[], key: string, asc = true): TRow[] => {
 	return rows.sort((a, b) => (asc ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key])));
 };
 
-export const requestData = async (url: string): Promise<TServerResponse> => {
+export const requestData = async (url: string): Promise<any> => {
 	return await (await fetch(url)).json();
 };
 export const generateId = (len: number): string => {

@@ -6,30 +6,25 @@
 		rowsPerPage,
 		searchTerm,
 		sortOrderAsc,
-		tableId,
-		totalPages,
-		totalRows
+		tableId
 	} from './stores';
 	import * as utils from './utils';
 	import type { TColumn, TRow, TRowAction } from './types';
 	import { NoData, Pagination, Row, TableActions, Summary, HeaderCell } from './partials';
 	import './style.min.css';
-	import loadDataFromUrl from './functions/loadDataFromUrl';
-	import loadDataFromServer from './functions/loadDataFromServer';
-	import loadDataFromRows from './functions/loadDataFromRows';
-	import { get, set } from 'svelte/store';
-	import setDataStores from './functions/setDataStores';
 
 	export let columns: TColumn[] = [];
 	export let rows: TRow[] = [];
 	export let actions: TRowAction[] = [];
-
 	export let itemsPerPage: number = 10;
-
 	export let server: string = null;
 	export let url: string = null;
 
-	if (!url && !server && !rows) throw new Error('You must provide rows, url or server props');
+	if (rows.length <= 0 && !!server && !!url)
+		throw new Error('You must provide rows, url or server props');
+
+	let totalPages: number;
+	let totalRows: number;
 
 	let isLoading: boolean = false;
 	let noData: boolean = false;
@@ -39,57 +34,32 @@
 	const loadData = async () => {
 		isLoading = true;
 
-		let data;
+		console.log({ url });
+		if (server || url) {
+			if (!!url) {
+				url = `${server}?page=${$currentPage}&itemsPerPage=${$rowsPerPage}&search=${$searchTerm}&sortColumn=${$currentSortColumn}&sortOrderAsc=${$sortOrderAsc}&filter={}`;
+			}
+			let data = await utils.requestData(url);
 
-		if (!!url) data = await loadDataFromUrl(url);
-		if (!!server) data = await loadDataFromServer(server);
-		if (!!rows && rows.length > 0) data = await loadDataFromRows(rows);
+			totalPages = data.totalPages;
+			totalRows = data.totalRows;
 
-		const setPageContent = () => {
-			const sorted: TRow[] = get(currentSortColumn)
-				? utils.sort(data, get(currentSortColumn), get(sortOrderAsc))
-				: data;
-			const filtered: TRow[] = get(searchTerm)
-				? utils.searchArray(sorted, get(searchTerm))
-				: sorted;
+			pageRows.set(data.rows);
+			// FIXME: Maybe we shouldn't update the rowsPerPage with the value coming from the server
+			rowsPerPage.set(data.itemsPerPage);
+		} else {
+			totalPages = utils.pageCount(rows, $rowsPerPage);
+			totalRows = utils.countRows(rows);
 
+			let sorted = $currentSortColumn ? utils.sort(rows, $currentSortColumn, $sortOrderAsc) : rows;
+			let filtered = $searchTerm ? utils.searchArray(sorted, $searchTerm) : sorted;
 			pageRows.set(
-				utils.loadPageRows(utils.sliceIntoPages(filtered, get(rowsPerPage)), get(currentPage))
+				await utils.loadPageRows(utils.splitRowsIntoPages(filtered, $rowsPerPage), $currentPage)
 			);
-
-			totalPages.set(utils.pageCount(data, get(rowsPerPage)));
-			totalRows.set(data.length);
-		};
-
-		if (!!url || !!rows) {
-			setPageContent();
 		}
 
+		noData = $pageRows.length <= 0;
 		isLoading = false;
-
-		// if (server) {
-		// 	url = `${server}?page=${$currentPage}&itemsPerPage=${$rowsPerPage}&search=${$searchTerm}&sortColumn=${$currentSortColumn}&sortOrderAsc=${$sortOrderAsc}&filter={}`;
-		// 	let data = await utils.requestData(url);
-
-		// 	totalPages = data.totalPages;
-		// 	totalRows = data.totalRows;
-
-		// 	pageRows.set(data.rows);
-		// 	// FIXME: Maybe we shouldn't update the rowsPerPage with the value coming from the server
-		// 	rowsPerPage.set(data.itemsPerPage);
-		// } else {
-		// 	totalPages = utils.pageCount(rows, $rowsPerPage);
-		// 	totalRows = utils.countRows(rows);
-
-		// 	let sorted = $currentSortColumn ? utils.sort(rows, $currentSortColumn, $sortOrderAsc) : rows;
-		// 	let filtered = $searchTerm ? utils.searchArray(sorted, $searchTerm) : sorted;
-		// 	pageRows.set(
-		// 		await utils.loadPageRows(utils.splitRowsIntoPages(filtered, $rowsPerPage), $currentPage)
-		// 	);
-		// }
-
-		// noData = $pageRows.length <= 0;
-		// isLoading = false;
 	};
 
 	$: rows,
@@ -150,8 +120,8 @@
 </div>
 
 <div class="mt-2 px-4 gap-2 flex flex-col md:flex-row md:text-center justify-between align-middle">
-	<Summary totalPages={$totalPages} totalRows={$totalRows} {noData} {isLoading} />
-	<Pagination totalPages={$totalPages} {noData} on:pageChange />
+	<Summary {totalPages} {totalRows} {noData} {isLoading} />
+	<Pagination {totalPages} {noData} on:pageChange />
 	<div>
 		<span
 			class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-400"

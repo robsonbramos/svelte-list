@@ -3,6 +3,8 @@ import { generateId } from './utils.js';
 
 export const pageRows = writable([]);
 export const currentPage = writable(1);
+export const totalPages = writable(0);
+export const totalRows = writable(0);
 export const currentSortColumn = writable(null);
 export const sortOrderAsc = writable(true);
 export const searchTerm = writable('');
