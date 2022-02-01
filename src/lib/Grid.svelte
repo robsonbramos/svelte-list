@@ -10,10 +10,11 @@
 	} from './stores';
 	import * as utils from './utils';
 	import { NoData, Pagination, Row, TableActions, Summary, HeaderCell } from './partials';
+	import type { Row as TypeRow } from './types';
 	import './style.min.css';
 
 	export let columns = [];
-	export let rows = [];
+	export let rows: TypeRow[] = [];
 	export let actions = [];
 	export let itemsPerPage = 10;
 	export let server = null;

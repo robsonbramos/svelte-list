@@ -6,7 +6,7 @@
 </script>
 
 <td>
-	<div class="text-sm flex align-middle justify-center">
+	<div class="text-xs flex align-middle justify-center">
 		{#each actions as action}
 			{#if action.type === 'delete'}
 				<span
