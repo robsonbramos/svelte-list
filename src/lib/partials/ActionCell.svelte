@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Row, RowAction } from '../types';
+	import type { TRow, TRowAction } from '../types';
 
-	export let row: Row;
-	export let actions: Array<RowAction>;
+	export let row: TRow;
+	export let actions: Array<TRowAction>;
 </script>
 
 <td>

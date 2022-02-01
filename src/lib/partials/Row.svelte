@@ -1,11 +1,11 @@
 <script lang="ts">
 	import DataCell from './DataCell.svelte';
 	import ActionCell from './ActionCell.svelte';
-	import type { Column, Row, RowAction } from '../types';
+	import type { TColumn, TRow, TRowAction } from '../types';
 
-	export let row: Row;
-	export let columns: Array<Column>;
-	export let actions: Array<RowAction>;
+	export let row: TRow;
+	export let columns: Array<TColumn>;
+	export let actions: Array<TRowAction>;
 </script>
 
 <tr>

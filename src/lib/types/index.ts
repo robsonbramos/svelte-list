@@ -1,5 +1,5 @@
-export { default as Column } from './Column';
-export { default as Row } from './Row';
-export { default as RowAction } from './RowAction';
-export { default as RowOptions } from './RowOptions';
-export { default as ServerResponse } from './ServerReponse';
+export type { default as TColumn } from './TColumn';
+export type { default as TRow } from './TRow';
+export type { default as TRowAction } from './TRowAction';
+export type { default as TRowOptions } from './TRowOptions';
+export type { default as TServerResponse } from './TServerReponse';

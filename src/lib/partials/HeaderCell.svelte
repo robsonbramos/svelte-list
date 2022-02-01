@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Column } from '../types';
+	import type { TColumn } from '../types';
 	import { currentSortColumn, sortOrderAsc } from '../stores';
 	import Icon from './Icon.svelte';
 
-	export let col: Column;
+	export let col: TColumn;
 </script>
 
 <th
@@ -21,12 +21,12 @@
 		>
 			{#if $currentSortColumn === col.key}
 				{#if $sortOrderAsc}
-					<Icon name="arrowUp" size={12} />
+					<Icon name="arrowUp" />
 				{:else}
-					<Icon name="arrowDown" size={12} />
+					<Icon name="arrowDown" />
 				{/if}
 			{:else}
-				<Icon name="arrowDownUp" size={12} />
+				<Icon name="arrowDownUp" />
 			{/if}
 		</span>
 	{/if}

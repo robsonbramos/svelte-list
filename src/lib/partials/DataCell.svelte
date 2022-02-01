@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { Column, Row } from '../types';
+	import type { TColumn, TRow } from '../types';
 	import Icon from './Icon.svelte';
 
-	export let row: Row;
-	export let column: Column;
+	export let row: TRow;
+	export let column: TColumn;
 
 	const dispatch = createEventDispatcher();
 

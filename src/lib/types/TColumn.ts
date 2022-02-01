@@ -1,6 +1,6 @@
-import type { Row } from '.';
+import type Row from './TRow';
 
-export default class Column {
+export default interface TColumn {
 	key: string;
 	label: string;
 	type?: string; // TODO: create a type for the "type" property

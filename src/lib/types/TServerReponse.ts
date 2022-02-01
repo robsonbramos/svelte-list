@@ -1,6 +1,6 @@
-import type { Row } from '.';
+import type Row from './TRow';
 
-export default class ServerResponse {
+export default interface TServerResponse {
 	totalPages: number;
 	totalRows: number;
 	itemsPerPage: number;
