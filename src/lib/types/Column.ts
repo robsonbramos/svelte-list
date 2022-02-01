@@ -1,8 +1,5 @@
 import type { Row } from '.';
 
-/**
- * @description the column for your table
- */
 export default class Column {
 	key: string;
 	label: string;
