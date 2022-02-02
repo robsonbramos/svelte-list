@@ -11,17 +11,16 @@
 		totalRows
 	} from './stores';
 	import * as utils from './utils';
-	import type { TColumn, TRow, TRowAction } from './types';
+	import type { TColumn, TRow, TRowAction, TServerResponse } from './types';
 	import { NoData, Pagination, Row, TableActions, Summary, HeaderCell } from './partials';
 	import './style.min.css';
 	import loadDataFromUrl from './functions/loadDataFromUrl';
 	import loadDataFromServer from './functions/loadDataFromServer';
 	import loadDataFromRows from './functions/loadDataFromRows';
-	import { get, set } from 'svelte/store';
-	import setDataStores from './functions/setDataStores';
+	import { get } from 'svelte/store';
 
 	export let columns: TColumn[] = [];
-	export let rows: TRow[] = [];
+	export let rows: TRow[] = null;
 	export let actions: TRowAction[] = [];
 
 	export let itemsPerPage: number = 10;
@@ -36,60 +35,70 @@
 
 	rowsPerPage.set(itemsPerPage);
 
+	const setPageFilters = (data: TRow[]): TRow[] => {
+		const sorted: TRow[] = get(currentSortColumn)
+			? utils.sort(data, get(currentSortColumn), get(sortOrderAsc))
+			: data;
+		return get(searchTerm) ? utils.searchArray(sorted, get(searchTerm)) : sorted;
+	};
+
+	const setPageRows = (filteredData: TRow[]): void => {
+		pageRows.set(
+			utils.loadPageRows(utils.sliceIntoPages(filteredData, get(rowsPerPage)), get(currentPage))
+		);
+	};
+
+	const setTotals = (data: TRow[]): void => {
+		totalPages.set(utils.pageCount(data, get(rowsPerPage)));
+		totalRows.set(data.length);
+	};
+
 	const loadData = async () => {
 		isLoading = true;
 
-		let data;
+		let data: TRow[];
 
-		if (!!url) data = await loadDataFromUrl(url);
-		if (!!server) data = await loadDataFromServer(server);
-		if (!!rows && rows.length > 0) data = await loadDataFromRows(rows);
-
-		const setPageContent = () => {
-			const sorted: TRow[] = get(currentSortColumn)
-				? utils.sort(data, get(currentSortColumn), get(sortOrderAsc))
-				: data;
-			const filtered: TRow[] = get(searchTerm)
-				? utils.searchArray(sorted, get(searchTerm))
-				: sorted;
-
-			pageRows.set(
-				utils.loadPageRows(utils.sliceIntoPages(filtered, get(rowsPerPage)), get(currentPage))
-			);
-
-			totalPages.set(utils.pageCount(data, get(rowsPerPage)));
-			totalRows.set(data.length);
-		};
-
-		if (!!url || !!rows) {
-			setPageContent();
+		if (!!rows && rows.length > 0) {
+			data = await loadDataFromRows(rows);
+			setPageFilters(data);
+			setPageRows(data);
+			setTotals(data);
 		}
 
+		if (!!url) {
+			data = await loadDataFromUrl(url);
+			setPageFilters(data);
+			setPageRows(data);
+			setTotals(data);
+		}
+
+		if (!!server) {
+			const res: TServerResponse = await loadDataFromServer(server, {
+				currentPage: get(currentPage),
+				rowsPerPage: get(rowsPerPage),
+				searchTerm: get(searchTerm),
+				currentSortColumn: get(currentSortColumn),
+				sortOrderAsc: get(sortOrderAsc)
+			});
+
+			data = res.rows || [];
+
+			setPageRows(data);
+			setTotals(data);
+		}
+
+		if (columns.length <= 0) {
+			let columnsArray = [];
+			let keys = Object.keys($pageRows[0]);
+			for (let i = 0; i < keys.length; i++) {
+				columnsArray = [...columnsArray, { key: keys[i] }];
+			}
+			columns = columnsArray;
+		}
+
+		console.log(columns);
+
 		isLoading = false;
-
-		// if (server) {
-		// 	url = `${server}?page=${$currentPage}&itemsPerPage=${$rowsPerPage}&search=${$searchTerm}&sortColumn=${$currentSortColumn}&sortOrderAsc=${$sortOrderAsc}&filter={}`;
-		// 	let data = await utils.requestData(url);
-
-		// 	totalPages = data.totalPages;
-		// 	totalRows = data.totalRows;
-
-		// 	pageRows.set(data.rows);
-		// 	// FIXME: Maybe we shouldn't update the rowsPerPage with the value coming from the server
-		// 	rowsPerPage.set(data.itemsPerPage);
-		// } else {
-		// 	totalPages = utils.pageCount(rows, $rowsPerPage);
-		// 	totalRows = utils.countRows(rows);
-
-		// 	let sorted = $currentSortColumn ? utils.sort(rows, $currentSortColumn, $sortOrderAsc) : rows;
-		// 	let filtered = $searchTerm ? utils.searchArray(sorted, $searchTerm) : sorted;
-		// 	pageRows.set(
-		// 		await utils.loadPageRows(utils.splitRowsIntoPages(filtered, $rowsPerPage), $currentPage)
-		// 	);
-		// }
-
-		// noData = $pageRows.length <= 0;
-		// isLoading = false;
 	};
 
 	$: rows,
@@ -118,9 +127,16 @@
 				<table id={$tableId} class="min-w-full divide-y divide-gray-200">
 					<thead class="bg-gray-50">
 						<tr>
-							{#each columns as col}
-								<HeaderCell {col} />
-							{/each}
+							{#if columns}
+								{#each columns as col}
+									<HeaderCell {col} />
+								{/each}
+							{:else}
+								{#each Object.keys($pageRows[0]) as label}
+									<th>{label}</th>
+								{/each}
+							{/if}
+
 							{#if actions.length > 0}
 								<th
 									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"

@@ -50,4 +50,4 @@
 	];
 </script>
 
-<Grid {columns} bind:rows {actions} itemsPerPage={6} />
+<Grid {columns} {rows} {actions} itemsPerPage={6} />

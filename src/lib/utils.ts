@@ -51,3 +51,28 @@ export const generateId = (len: number): string => {
 	}
 	return result;
 };
+
+export const urlBuilder = {
+	url: null,
+	params: [],
+	setUrl: function (url: string): typeof urlBuilder {
+		this.url = url;
+		return this;
+	},
+	addParam: function (key: string, value: string): typeof urlBuilder {
+		if (!!key && !!value) this.params = [...this.params, { key, value }];
+		return this;
+	},
+	get: function (): string {
+		let queryString = '';
+		let queryArray = [];
+
+		for (let i = 0; i < this.params.length; i++) {
+			queryArray = [...queryArray, `${this.params[i].key}=${this.params[i].value}`];
+		}
+
+		queryString = queryArray.join('&');
+
+		return `${this.url}?${queryString}`;
+	}
+};

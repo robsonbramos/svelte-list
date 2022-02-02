@@ -1,8 +1,8 @@
-import type Row from './TRow';
+import type TRow from './TRow';
 
 export default interface TServerResponse {
-	totalPages: number;
-	totalRows: number;
-	itemsPerPage: number;
-	rows: Array<Row>;
+	totalPage?: number;
+	totalRows?: number;
+	itemsPerPage?: number;
+	rows: Array<TRow>;
 }
