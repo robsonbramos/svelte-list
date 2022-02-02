@@ -15,8 +15,6 @@ const config = {
 	kit: {
 		adapter: adapter(),
 
-		target: '#svelte',
-
 		package: {
 			files: (filepath) => {
 				console.log(filepath);

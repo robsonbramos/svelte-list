@@ -40,8 +40,8 @@ export const sort = (rows: TRow[], key: string, asc = true): TRow[] => {
 	return rows.sort((a, b) => (asc ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key])));
 };
 
-export const requestData = async (url: string): Promise<any> => {
-	return await (await fetch(url)).json();
+export const requestData = async (input: RequestInfo, init?: RequestInit): Promise<any> => {
+	return await (await fetch(input, init)).json();
 };
 export const generateId = (len: number): string => {
 	let result = '';
@@ -75,4 +75,33 @@ export const urlBuilder = {
 
 		return `${this.url}?${queryString}`;
 	}
+};
+
+/**
+ * Performs a deep merge of `source` into `target`.
+ * Mutates `target` only but not its objects and arrays.
+ *
+ * @author inspired by [jhildenbiddle](https://stackoverflow.com/a/48218209).
+ */
+export const mergeDeep = (target, source) => {
+	const isObject = (obj) => obj && typeof obj === 'object';
+
+	if (!isObject(target) || !isObject(source)) {
+		return source;
+	}
+
+	Object.keys(source).forEach((key) => {
+		const targetValue = target[key];
+		const sourceValue = source[key];
+
+		if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+			target[key] = targetValue.concat(sourceValue);
+		} else if (isObject(targetValue) && isObject(sourceValue)) {
+			target[key] = mergeDeep(Object.assign({}, targetValue), sourceValue);
+		} else {
+			target[key] = sourceValue;
+		}
+	});
+
+	return target;
 };

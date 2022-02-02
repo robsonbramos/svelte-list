@@ -89,10 +89,12 @@
 
 		if (columns.length <= 0) {
 			let columnsArray = [];
-			let keys = Object.keys($pageRows[0]);
+			let keys = $pageRows[0] ? Object.keys($pageRows[0]) : [];
+
 			for (let i = 0; i < keys.length; i++) {
 				columnsArray = [...columnsArray, { key: keys[i] }];
 			}
+
 			columns = columnsArray;
 		}
 
@@ -127,15 +129,9 @@
 				<table id={$tableId} class="min-w-full divide-y divide-gray-200">
 					<thead class="bg-gray-50">
 						<tr>
-							{#if columns}
-								{#each columns as col}
-									<HeaderCell {col} />
-								{/each}
-							{:else}
-								{#each Object.keys($pageRows[0]) as label}
-									<th>{label}</th>
-								{/each}
-							{/if}
+							{#each columns as col}
+								<HeaderCell {col} />
+							{/each}
 
 							{#if actions.length > 0}
 								<th
